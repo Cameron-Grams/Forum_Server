@@ -10,7 +10,10 @@ app.get( '/', ( req, res ) => {
 
 app.post( '/', ( req, res ) => {
     console.log( "with req: ", req.body );
+
     console.log( "+++++++++++++++++++++++++++++++++++++++" );
+    console.log( "+++++++++++++++++++++++++++++++++++++++" );
+
     res.json( { body: "received " + req.body.text });
 })
 
