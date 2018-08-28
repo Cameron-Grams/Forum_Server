@@ -1,21 +1,59 @@
+const mongoose = require( 'mongoose' );
+mongoose.Promise = global.Promise;
+
 const express = require( 'express' );
 const app = express();
 const bodyparser = require( 'body-parser' ); 
 
+const { PORT, DATABASE_URL } = require( './config/config' );
+
+const userRouter = require( './routers/userRouter' ); 
+const commentRouter = require( './routers/userRouter' );
+
 app.use( bodyparser.json() );
 
-app.get( '/', ( req, res ) => {
-    res.send( "Hello World\n" );
-} );
+app.use( '/api', userRouter );
+app.use( '/api', commentRouter );
 
-app.post( '/', ( req, res ) => {
-    console.log( "with req: ", req.body );
+// app.use( '/api', themeRouter );
 
-    console.log( "+++++++++++++++++++++++++++++++++++++++" );
-    console.log( "+++++++++++++++++++++++++++++++++++++++" );
+function runServer( port = PORT, database = DATABASE_URL ){
+    return new Promise( ( resolve, reject ) => {
+        mongoose.connect( database, err  => {
+            if ( err ){
+                return reject( err ); 
+            }
+            server = app.listen( port, () => {
+            console.log( `Server on ${ port } from config` );
+            resolve();
+            })
+            .on( 'error', err => {
+            mongoose.disconnect();
+            reject( err );
+            });
+        } )
+    } );
+}
 
-    res.json( { body: "received " + req.body.text });
-})
 
-app.listen( 3000, () => console.log( "Listening on 3000" ) );
+function closeServer(){
+    return mongoose.disconnect().then( () => {     
+        return new Promise( ( resolve, reject ) => {
+            console.log( 'Closing server' );
+            server.close(err => {
+                if ( err ) {
+                    return reject( err );
+                }
+                resolve();
+            });
+        });
+    } );
+}
 
+if ( require.main === module ){
+    runServer()
+    .catch( err => console.log( err ) );
+}
+
+
+module.exports = { app, runServer, closeServer }; 
