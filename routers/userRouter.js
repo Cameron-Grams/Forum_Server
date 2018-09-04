@@ -9,7 +9,7 @@ router.route( '/users/login' )
         console.log( "In user router with: ", req.body );
         res.json( { 
             message: "Good test",
-            userName: "Lizzy",
+            userName: "User1",
             userId: 1
         } );
     });
