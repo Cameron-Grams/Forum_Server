@@ -7,7 +7,7 @@ const router = express.Router();
 router.route( '/users/login' )
     .post( ( req, res ) => {
         console.log( "In user router with: ", req.body );
-        res.json( { 
+        return res.json( { 
             message: "Good test",
             userName: "User1",
             userId: 1
