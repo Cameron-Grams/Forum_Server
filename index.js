@@ -26,14 +26,16 @@ app.use( '/api', commentRouter );
 
 function runServer( port = PORT, database = DATABASE_URL ){
     return new Promise( ( resolve, reject ) => {
-        mongoose.connect( database, err  => {
+        mongoose.connect( database,
+            { useNewUrlParser: true },
+            err  => {
             if ( err ){
                 return reject( err ); 
             }
             server = app.listen( port, () => {
             console.log( `Server on ${ port } from config` );
             resolve();
-            })
+            } )
             .on( 'error', err => {
             mongoose.disconnect();
             reject( err );
