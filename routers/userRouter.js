@@ -14,6 +14,12 @@ router.route( '/users/login' )
         } );
     });
 
-
+router.route( '/users/register' )
+    .post( ( req, res ) => {
+        console.log( "In user router with register and: ", req.body );
+        return res.json( {
+            message: "Good registration"
+        })
+    })
 
 module.exports = router;
